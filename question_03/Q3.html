@@ -1,0 +1,83 @@
+<!-- -------------------------------- -->
+<!-- ------- Marker Animation ------- -->
+<!-- -------------------------------- -->
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Add a default marker</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+<script src="https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.css" rel="stylesheet" />
+<style>
+    body{margin: 10;padding:10;}
+    #map{position: absolute; top: 150px; bottom:0; width: 80%;}
+    .map-overlay {
+      position: absolute;
+      left: 0;
+      padding: 10px;
+    }
+ 
+</style>
+</head>
+<body>
+
+<div id="heading">
+<h1>Q3 - a map marker moving between South Station to Logan Airport</h1>
+<div class="map-overlay top">
+  <button style="font-size: 2em;" onclick="move()">
+    Show SL1 route between South Station to Logan Airport
+  </button>
+</div>
+</div>
+    
+<div id="map"></div>
+ 
+<script>
+  // api token
+  mapboxgl.accessToken =
+    'pk.eyJ1IjoiemNvbm9teSIsImEiOiJja3plbzYzOWIwMmZmMm9vM2pzZzFmeWxhIn0.6gcElE_dOckT6lpVYRwgLA';
+
+  // map instance
+  var map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/satellite-v9',
+      center: [-71.056124, 42.350451],
+      zoom: 12
+  });
+
+  // map marker
+  var marker = new mapboxgl.Marker()
+      .setLngLat([-71.056124, 42.350451])
+      .addTo(map);
+
+  // bus SL1 has only 3 stops between South Station and BOS Terminal 1!
+  const busStops = [
+      [-71.056124, 42.350451],
+      [-71.046362, 42.354083],
+      [-71.04246, 42.34863],
+      [-71.037739, 42.347149],
+      [-71.021729,42.364525]
+  ];
+
+  // animate marker
+  let counter = 0;
+  function move(){
+    setTimeout(() =>{
+      if(counter >= busStops.length)
+      {
+        counter = 0;
+      }
+      marker.setLngLat(busStops[counter]);
+      counter++;
+      move();
+    },2000);
+    
+  }
+
+</script>
+ 
+</body>
+</html>

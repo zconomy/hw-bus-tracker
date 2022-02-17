@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Map</title>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.css" rel="stylesheet" />    
+    <style>
+        body{margin: 10;padding:10;}
+        #map{position: absolute; top: 100px; bottom:0; width: 80%;}
+    </style>
+</head>
+<body>
+<div id="heading">
+<h1>Q1 - a map of Cambridge, center on MIT campus</h1>
+</div>
+<div id="map"></div>
+<script>
+
+    // your token from https://account.mapbox.com
+    mapboxgl.accessToken=
+        'pk.eyJ1IjoiemNvbm9teSIsImEiOiJja3plbzYzOWIwMmZmMm9vM2pzZzFmeWxhIn0.6gcElE_dOckT6lpVYRwgLA';
+
+    // add map to page
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/satellite-v9',
+        center: [-71.091542,42.358862],
+        zoom: 15
+
+    });
+
+</script>
+</body>
+</html>
