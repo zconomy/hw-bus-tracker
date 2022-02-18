@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Add a default marker</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+<script src="https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.css" rel="stylesheet" />
+<style>
+    body{margin: 10;padding:10;}
+    #map{position: absolute; top: 150px; bottom:0; width: 80%;}
+    .map-overlay {
+      position: absolute;
+      left: 0;
+      padding: 10px;
+    }
+ 
+</style>
+</head>
+<body>
+
+<div id="heading">
+<h1>Q4 - Live tracker for bus route 1, updated every 15sec</h1>
+<div class="map-overlay top">
+  <button style="font-size: 2em;" onclick="run()">
+    Click here to start tracking!
+  </button>
+</div>
+</div>
+    
+<div id="map"></div>
+ 
+<script>
+  // api token
+  mapboxgl.accessToken =
+    'pk.eyJ1IjoiemNvbm9teSIsImEiOiJja3plbzYzOWIwMmZmMm9vM2pzZzFmeWxhIn0.6gcElE_dOckT6lpVYRwgLA';
+
+  // map instance
+  var map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/satellite-v9',
+      center: [-71.056124, 42.350451],
+      zoom: 12
+  });
+
+  // map marker
+  const markerArray = new Array();
+
+  // bus data from MBTA
+  async function routeData(){
+    var url  = 'https://api-v3.mbta.com/vehicles?filter[route]=1&include=trip';
+    var res  = await fetch(url);
+    var data = await res.json();
+    return data.data;
+  }
+
+  async function run(){
+    const locations = await routeData();
+    console.log(new Date());
+    
+    if(markerArray.length < locations.length)
+    {
+      console.log("time to create markers");
+      markerArray.length = 0;
+      for (let i = 0; i < locations.length; i++) {
+        var marker = new mapboxgl.Marker()
+        .setLngLat([locations[i].attributes.longitude, locations[i].attributes.latitude])
+        .addTo(map);
+        markerArray.push(marker);
+      }
+    }
+    else
+    {
+      console.log("time to move markers");
+      for (let i = 0; i < locations.length; i++) {
+        markerArray[i].setLngLat([locations[i].attributes.longitude, locations[i].attributes.latitude]);
+      }
+    }
+
+    //timer
+    setTimeout(run, 15000);
+  }
+
+</script>
+ 
+</body>
+</html>
